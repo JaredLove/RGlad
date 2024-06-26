@@ -19,8 +19,6 @@ let enemyHealth = 50;
 let enemyAttack = 12;
 
 // console.log(`${enemyRobot}'s specs: Health: ${enemyHealth} Attack: ${enemyAttack}`);
-    // alert players the round started
-    window.alert("Welcome To Robot Gladiators");
 
 const fight = function(enemyName){
     while(playerHealth > 0 && enemyHealth > 0){
@@ -56,7 +54,7 @@ const fight = function(enemyName){
                 console.log(`Your now have ${playerMoney} gold pieces left.`)
                 fight();
             }else{
-                window.alert(`That the spirit ${playerName}, get back in there!`);
+                window.alert(`That's the spirit ${playerName}, get back in there!`);
                 fight();
             }
         }else if(promptFight === "QUIT" || promptFight === "quit"){
@@ -72,11 +70,19 @@ const fight = function(enemyName){
 
 const startGame = function(enemyNames){ 
     for(i=0; i < enemyNames.length; i++){
-        let pickedEnemyName = enemyNames[i];        
-        enemyHealth = 50;
-        playerHealth = 100;
-        fight(pickedEnemyName);
-
+        if(playerHealth > 0){
+            // alert players the round started
+            window.alert("Welcome To Robot Gladiators");
+            window.alert(`Round ${i + 1}: ${playerName} vs ${enemyNames[i]}`);
+       
+            let pickedEnemyName = enemyNames[i];        
+            enemyHealth = 50;
+            playerHealth = 100;
+            fight(pickedEnemyName);
+        }else {
+            window.alert(`You died in battle!`);
+            break;
+        }
     }
 }
 
