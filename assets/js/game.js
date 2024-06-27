@@ -5,10 +5,11 @@
 // "LOSE" - Player robot's health is zero or less
 
 let playerName = window.prompt("What is your robots name?");
-let playerHealth = 100;
+let playerHealth = 10;
 let playerAttack = 10;
 let playerMoney = 10;
-
+let score = 0;
+let gameOngoing = true; 
 
 // You can also log multiple values at once like this
 console.log(`${playerName}'s specs: Health: ${playerHealth} Attack: ${playerAttack}`);
@@ -21,69 +22,101 @@ let enemyAttack = 12;
 // console.log(`${enemyRobot}'s specs: Health: ${enemyHealth} Attack: ${enemyAttack}`);
 
 const fight = function(enemyName){
-    while(playerHealth > 0 && enemyHealth > 0){
-        let promptFight = window.prompt("Would you like to FIGHT, SKIP, or End this battle? Enter 'FIGHT', 'SKIP', or 'Quit' to choose");
+
+        while(playerHealth > 0 && enemyHealth > 0  && gameOngoing){
+            let promptFight = window.prompt("Would you like to FIGHT, SKIP, or End this battle? Enter 'FIGHT', 'SKIP', or 'Quit' to choose");
 
 
-        if(promptFight === "FIGHT" || promptFight === "fight"){
-            // subtract the value of playerAttack from the value of enemyHealth
-            enemyHealth -= playerAttack;
-            if (enemyHealth <= 0){
-                window.alert(`${playerName} has done ${playerAttack} damage to ${enemyName} resulting in his death!`);
-                break;
-            }else {
-                // log the result
-                console.log(`${playerName} attacked ${enemyName} for ${playerAttack} damage and ${enemyName} now has ${enemyHealth} health left.`);
-            }
-            // subtract the enemyAttack from the playerHealth
-            playerHealth -= enemyAttack;
-            if (playerHealth <= 0){
-                window.alert(`${enemyName} has done ${enemyAttack} damage to ${playerName} resulting in your death!`);
-                break;
-            }else{
-                // log the result 
-                console.log(`${enemyName} attacked ${playerName} for ${enemyAttack} damage and ${playerName} now has ${playerHealth} health left.`);
-            }
-        }else if(promptFight === "SKIP" || promptFight === "skip"){
-            window.alert(`You chose to skip!`);
-            window.alert(`The bosses arent happy about this!`);
-            let confirm = window.confirm(`Are you sure you want to do this?`);
-            if(confirm){
-                playerMoney -= 2;
-                window.alert(`The bosses took 2 gold pieces from you!`)
-                console.log(`Your now have ${playerMoney} gold pieces left.`)
+            if(promptFight === "FIGHT" || promptFight === "fight"){
+                // subtract the value of playerAttack from the value of enemyHealth
+                enemyHealth -= playerAttack;
+                if (enemyHealth <= 0){
+                    window.alert(`${playerName} has done ${playerAttack} damage to ${enemyName} resulting in their death!`);
+                    score += 20;
+                    break;
+                }else {
+                    // log the result
+                    console.log(`${playerName} attacked ${enemyName} for ${playerAttack} damage and ${enemyName} now has ${enemyHealth} health left.`);
+                }
+                // subtract the enemyAttack from the playerHealth
+                playerHealth -= enemyAttack;
+                if (playerHealth <= 0){
+                    window.alert(`${enemyName} has done ${enemyAttack} damage to ${playerName} resulting in your death!`);
+                    break;
+                }else{
+                    // log the result 
+                    console.log(`${enemyName} attacked ${playerName} for ${enemyAttack} damage and ${playerName} now has ${playerHealth} health left.`);
+                }
+            }else if(promptFight === "SKIP" || promptFight === "skip"){
+                window.alert(`You chose to skip!`);
+                window.alert(`The bosses arent happy about this!`);
+                let confirm = window.confirm(`Are you sure you want to do this?`);
+                if(confirm){
+                    playerMoney -= 2;
+                    window.alert(`The bosses took 2 gold pieces from you!`)
+                    console.log(`Your now have ${playerMoney} gold pieces left.`)
+                    fight();
+                }else{
+                    window.alert(`That's the spirit ${playerName}, get back in there!`);
+                    fight();
+                }
+            }else if(promptFight === "QUIT" || promptFight === "quit"){
+                window.alert(`${playerName} has chosen to quit the game!`);
+                window.alert(`Come back when you have to guts to win ${playerName}!`);
+                gameOngoing = false;
+                return;
+            }else{  
+                window.alert("Please input a valid option 'FIGHT' or 'SKIP'");
                 fight();
-            }else{
-                window.alert(`That's the spirit ${playerName}, get back in there!`);
-                fight();
             }
-        }else if(promptFight === "QUIT" || promptFight === "quit"){
-            window.alert(`${playerName} has chosen to quit the game!`);
-            window.alert(`Come back when you have to guts to win ${playerName}!`);
-            break;
-        }else{  
-            window.alert("Please input a valid option 'FIGHT' or 'SKIP'");
-            fight();
         }
-    }
 };
 
-const startGame = function(enemyNames){ 
-    for(i=0; i < enemyNames.length; i++){
+const gameShop = function(){
+
+}
+
+const endGame = function(){
+    if(playerHealth > 0 ){
+        window.alert(`The game is over ${playerName}. Let's see how you did!`);
+        window.alert(`Your score is ${score}`); 
+    }else {
+        window.alert(`${playerName} has died in battle!`);
+        window.alert("Game Over!");
+    }
+
+    let playagainConfirm = window.confirm("Would you like to play again?");
+    
+    if(playagainConfirm){
+        startGame();
+    }else {
+        window.alert("Thank you for playing Robot Gladiators, come back soon!");
+    }
+
+    
+
+}
+
+
+const startGame = function(){ 
+    // reset player stats
+    playerHealth = 10;
+    playerAttack = 10;
+    playerMoney = 10;
+    gameOngoing = true;
+    for(i=0; i < enemyRobots.length && gameOngoing; i++){
         if(playerHealth > 0){
             // alert players the round started
             window.alert("Welcome To Robot Gladiators");
-            window.alert(`Round ${i + 1}: ${playerName} vs ${enemyNames[i]}`);
-       
-            let pickedEnemyName = enemyNames[i];        
+            window.alert(`Round ${i + 1}: ${playerName} vs ${enemyRobots[i]}`);
+            let pickedEnemyName = enemyRobots[i];      
+            console.log(pickedEnemyName);
             enemyHealth = 50;
-            playerHealth = 100;
             fight(pickedEnemyName);
-        }else {
-            window.alert(`You died in battle!`);
-            break;
         }
     }
+
+    endGame();
 }
 
-startGame(enemyRobots);
+startGame();
