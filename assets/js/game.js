@@ -5,7 +5,7 @@
 // "LOSE" - Player robot's health is zero or less
 
 let playerName = window.prompt("What is your robots name?");
-let playerHealth = 10;
+let playerHealth = 100;
 let playerAttack = 10;
 let playerMoney = 10;
 let score = 0;
@@ -19,8 +19,12 @@ const enemyRobots = ["Roborto", "Amy Andriod", "Robo Trumble"];
 let enemyHealth = 50;
 let enemyAttack = 12;
 
-// console.log(`${enemyRobot}'s specs: Health: ${enemyHealth} Attack: ${enemyAttack}`);
+// console.log(`${enemyRobot}'s specs: Health: ${enemyHealth} Attack: ${enemyAttack}`);=
 
+const rng = function(min, max){
+    let num = Math.floor(Math.random() * (max - min + 1) + min);
+    return num; 
+}
 const fight = function(enemyName){
 
         while(playerHealth > 0 && enemyHealth > 0  && gameOngoing){
@@ -28,31 +32,33 @@ const fight = function(enemyName){
 
 
             if(promptFight === "FIGHT" || promptFight === "fight"){
+                let damage = rng(playerAttack - 3, playerAttack);
                 // subtract the value of playerAttack from the value of enemyHealth
-                enemyHealth -= playerAttack;
+                enemyHealth = Math.max(0, enemyHealth - damage);
                 if (enemyHealth <= 0){
-                    window.alert(`${playerName} has done ${playerAttack} damage to ${enemyName} resulting in their death!`);
+                    window.alert(`${playerName} has done ${damage} damage to ${enemyName} resulting in their death!`);
                     score += 20;
                     break;
                 }else {
                     // log the result
-                    console.log(`${playerName} attacked ${enemyName} for ${playerAttack} damage and ${enemyName} now has ${enemyHealth} health left.`);
+                    console.log(`${playerName} attacked ${enemyName} for ${damage} damage and ${enemyName} now has ${enemyHealth} health left.`);
                 }
+                let eDamage = rng(enemyAttack - 3, enemyAttack);
                 // subtract the enemyAttack from the playerHealth
-                playerHealth -= enemyAttack;
+                playerHealth = Math.max(0, playerHealth - eDamage);
                 if (playerHealth <= 0){
-                    window.alert(`${enemyName} has done ${enemyAttack} damage to ${playerName} resulting in your death!`);
+                    window.alert(`${enemyName} has done ${eDamage} damage to ${playerName} resulting in your death!`);
                     break;
                 }else{
                     // log the result 
-                    console.log(`${enemyName} attacked ${playerName} for ${enemyAttack} damage and ${playerName} now has ${playerHealth} health left.`);
+                    console.log(`${enemyName} attacked ${playerName} for ${eDamage} damage and ${playerName} now has ${playerHealth} health left.`);
                 }
             }else if(promptFight === "SKIP" || promptFight === "skip"){
                 window.alert(`You chose to skip!`);
                 window.alert(`The bosses arent happy about this!`);
                 let confirm = window.confirm(`Are you sure you want to do this?`);
                 if(confirm){
-                    playerMoney -= 2;
+                    playerMoney = math.max(0, playerMoney - 2);
                     window.alert(`The bosses took 2 gold pieces from you!`)
                     console.log(`Your now have ${playerMoney} gold pieces left.`)
                     break;
@@ -159,7 +165,7 @@ const endGame = function(){
 
 const startGame = function(){ 
     // reset player stats
-    playerHealth = 10;
+    playerHealth = 100;
     playerAttack = 10;
     playerMoney = 10;
     gameOngoing = true;
@@ -170,7 +176,7 @@ const startGame = function(){
             window.alert(`Round ${i + 1}: ${playerName} vs ${enemyRobots[i]}`);
             let pickedEnemyName = enemyRobots[i];      
             console.log(pickedEnemyName);
-            enemyHealth = 50;
+            enemyHealth = rng(40, 60);
             fight(pickedEnemyName);
 
             if(playerHealth > 0 && i < enemyRobots.length -1){
