@@ -55,10 +55,9 @@ const fight = function(enemyName){
                     playerMoney -= 2;
                     window.alert(`The bosses took 2 gold pieces from you!`)
                     console.log(`Your now have ${playerMoney} gold pieces left.`)
-                    fight();
+                    break;
                 }else{
                     window.alert(`That's the spirit ${playerName}, get back in there!`);
-                    fight();
                 }
             }else if(promptFight === "QUIT" || promptFight === "quit"){
                 window.alert(`${playerName} has chosen to quit the game!`);
@@ -67,13 +66,73 @@ const fight = function(enemyName){
                 return;
             }else{  
                 window.alert("Please input a valid option 'FIGHT' or 'SKIP'");
-                fight();
             }
         }
 };
 
-const gameShop = function(){
+const shop = function(){
+    window.alert("Welcome to the tavern!");
+    let shopOptionPrompt = window.prompt("Would you like to 'HEAL', 'UPGRADE', or 'LEAVE' the tavern?");
+    console.log(`${playerName}'s gold: ${playerMoney}`);
+    switch(shopOptionPrompt){
+        case "HEAL":
+        case "heal":
+            let healOption = window.confirm("Healing will cost you 7 gold pieces, are you sure you want to this?");
+            if(playerMoney < 7) {
+                window.alert("You do not have enough gold to do this");
+            }else if(healOption && playerMoney >= 7){
+                window.alert("You suddenly feel this warmth of sunlight washing over you healing for 20 health points.");
+                playerMoney -= 7;
+                playerHealth += 20;
+                console.log(`You now have ${playerMoney} gold left.`);
+            }else{
+                window.alert("You chose to not heal.");
+            }
+            
+            let reShop = window.confirm("Is there anything else I can do for ya?")
+            if(reShop){
+                shop();
+            }else{
+                window.alert("Thank you for visiting the tavern!");
+            }
 
+            break;
+        case "UPGRADE":
+        case "upgrade":
+            let upgradeOption = window.confirm("Upgrading your attack by 5 will cost you 5 gold pieces, are you sure you want to this?");
+            if(playerMoney < 5) {
+                window.alert("You do not have enough gold to do this");
+            }else if(upgradeOption && playerMoney >= 5){
+                window.alert("You give your weapon to the shop keeper, his hands glow blue, magic feels the air, and with a flash your sword does 5 more damage .");
+                playerMoney -= 5;
+                playerAttack += 5;
+                console.log(`You now have ${playerMoney} gold left.`);
+            }else{
+                window.alert("You chose to not upgrade.");
+            }
+            
+            let reUpShop = window.confirm("Is there anything else I can do for ya?")
+            if(reUpShop){
+                shop();
+            }else{
+                window.alert("Thank you for visiting the tavern!");
+            }
+
+            break;
+        case "LEAVE":
+        case "leave":
+            let leaveOption = window.confirm("You are exting the tavern, are you sure you want to do this?");
+            if(leaveOption){
+                window.alert("Thank you for visiting the tavern!");
+            }else{
+                shop();
+            }
+            break;
+        default:
+            console.log("You did not choose a valid option");
+            shop();
+            break;
+    }
 }
 
 const endGame = function(){
@@ -113,6 +172,14 @@ const startGame = function(){
             console.log(pickedEnemyName);
             enemyHealth = 50;
             fight(pickedEnemyName);
+
+            if(playerHealth > 0 && i < enemyRobots.length -1){
+                let shopConfirm = window.confirm("The fight is over, would you like to vist the store before the next round?");
+                
+                if(shopConfirm){
+                  shop();  
+                }
+            }
         }
     }
 
