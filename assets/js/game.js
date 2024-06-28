@@ -130,8 +130,19 @@ const endGame = function(){
 
 }
 
+const getPlayerName = function(){
+    let playerName = "";
+
+    while(playerName === "" || playerName === null || playerName === undefined){
+        playerName = prompt("What is your players name?");
+    }
+    
+    return playerName;
+    
+}
+
 const playerInfo = {
-    name: window.prompt("What is your robot's name?"),
+    name: getPlayerName(),
     health: 100,
     attack: 10,
     gold: 10,
