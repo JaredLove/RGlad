@@ -1,73 +1,53 @@
-// Game States
-// "WIN" - Player robot has defeated all enemy-robots 
-//      * Fight all enemy-robots
-//      * Defeat each enemy-robot
-// "LOSE" - Player robot's health is zero or less
-
-let playerName = window.prompt("What is your robots name?");
-let playerHealth = 100;
-let playerAttack = 10;
-let playerMoney = 10;
-let score = 0;
 let gameOngoing = true; 
-
-// You can also log multiple values at once like this
-console.log(`${playerName}'s specs: Health: ${playerHealth} Attack: ${playerAttack}`);
-
-
-const enemyRobots = ["Roborto", "Amy Andriod", "Robo Trumble"];
-let enemyHealth = 50;
-let enemyAttack = 12;
-
-// console.log(`${enemyRobot}'s specs: Health: ${enemyHealth} Attack: ${enemyAttack}`);=
 
 const rng = function(min, max){
     let num = Math.floor(Math.random() * (max - min + 1) + min);
     return num; 
 }
-const fight = function(enemyName){
 
-        while(playerHealth > 0 && enemyHealth > 0  && gameOngoing){
+const fight = function(enemyObj){
+        console.log(`${playerInfo.name}'s specs: Health: ${playerInfo.health} Attack Power: ${playerInfo.attack}`);
+        while(playerInfo.health > 0 && enemyObj.health > 0  && gameOngoing){
             let promptFight = window.prompt("Would you like to FIGHT, SKIP, or End this battle? Enter 'FIGHT', 'SKIP', or 'Quit' to choose");
 
 
             if(promptFight === "FIGHT" || promptFight === "fight"){
-                let damage = rng(playerAttack - 3, playerAttack);
-                // subtract the value of playerAttack from the value of enemyHealth
-                enemyHealth = Math.max(0, enemyHealth - damage);
-                if (enemyHealth <= 0){
-                    window.alert(`${playerName} has done ${damage} damage to ${enemyName} resulting in their death!`);
-                    score += 20;
+                let damage = rng(playerInfo.attack - 3, playerInfo.attack);
+                // subtract the value of playerInfo.attack from the value of enemyObj.health
+                enemyObj.health = Math.max(0, enemyObj.health - damage);
+                if (enemyObj.health <= 0){
+                    window.alert(`${playerInfo.name} has done ${damage} damage to ${enemyObj.name} resulting in their death!`);
+                    playerInfo.score += 20;
                     break;
                 }else {
                     // log the result
-                    console.log(`${playerName} attacked ${enemyName} for ${damage} damage and ${enemyName} now has ${enemyHealth} health left.`);
+                    console.log(`${playerInfo.name} attacked ${enemyObj.name} for ${damage} damage and ${enemyObj.name} now has ${enemyObj.health} health left.`);
                 }
-                let eDamage = rng(enemyAttack - 3, enemyAttack);
-                // subtract the enemyAttack from the playerHealth
-                playerHealth = Math.max(0, playerHealth - eDamage);
-                if (playerHealth <= 0){
-                    window.alert(`${enemyName} has done ${eDamage} damage to ${playerName} resulting in your death!`);
+                let eDamage = rng(enemyObj.attack - 3, enemyObj.attack);
+                // subtract the enemyObj.attack from the playerInfo.health
+                playerInfo.health = Math.max(0, playerInfo.health - eDamage);
+                if (playerInfo.health <= 0){
+                    window.alert(`${enemyObj.name} has done ${eDamage} damage to ${playerInfo.name} resulting in your death!`);
                     break;
                 }else{
                     // log the result 
-                    console.log(`${enemyName} attacked ${playerName} for ${eDamage} damage and ${playerName} now has ${playerHealth} health left.`);
+                    console.log(`${enemyObj.name} attacked ${playerInfo.name} for ${eDamage} damage and ${playerInfo.name} now has ${playerInfo.health} health left.`);
                 }
             }else if(promptFight === "SKIP" || promptFight === "skip"){
                 window.alert(`You chose to skip!`);
                 window.alert(`The bosses arent happy about this!`);
                 let confirm = window.confirm(`Are you sure you want to do this?`);
                 if(confirm){
-                    playerMoney = math.max(0, playerMoney - 2);
+                    playerInfo.gold = Math.max(0, playerInfo.gold - 2);
                     window.alert(`The bosses took 2 gold pieces from you!`)
-                    console.log(`Your now have ${playerMoney} gold pieces left.`)
+                    console.log(`Your now have ${playerInfo.gold} gold pieces left.`)
                     break;
                 }else{
-                    window.alert(`That's the spirit ${playerName}, get back in there!`);
+                    window.alert(`That's the spirit ${playerInfo.name}, get back in there!`);
                 }
             }else if(promptFight === "QUIT" || promptFight === "quit"){
-                window.alert(`${playerName} has chosen to quit the game!`);
-                window.alert(`Come back when you have to guts to win ${playerName}!`);
+                window.alert(`${playerInfo.name} has chosen to quit the game!`);
+                window.alert(`Come back when you have to guts to win ${playerInfo.name}!`);
                 gameOngoing = false;
                 return;
             }else{  
@@ -79,18 +59,13 @@ const fight = function(enemyName){
 const shop = function(){
     window.alert("Welcome to the tavern!");
     let shopOptionPrompt = window.prompt("Would you like to 'HEAL', 'UPGRADE', or 'LEAVE' the tavern?");
-    console.log(`${playerName}'s gold: ${playerMoney}`);
+    console.log(`${playerInfo.name}'s gold: ${playerInfo.gold}`);
     switch(shopOptionPrompt){
         case "HEAL":
         case "heal":
             let healOption = window.confirm("Healing will cost you 7 gold pieces, are you sure you want to this?");
-            if(playerMoney < 7) {
-                window.alert("You do not have enough gold to do this");
-            }else if(healOption && playerMoney >= 7){
-                window.alert("You suddenly feel this warmth of sunlight washing over you healing for 20 health points.");
-                playerMoney -= 7;
-                playerHealth += 20;
-                console.log(`You now have ${playerMoney} gold left.`);
+            if(healOption){
+                playerInfo.heal();
             }else{
                 window.alert("You chose to not heal.");
             }
@@ -106,15 +81,8 @@ const shop = function(){
         case "UPGRADE":
         case "upgrade":
             let upgradeOption = window.confirm("Upgrading your attack by 5 will cost you 5 gold pieces, are you sure you want to this?");
-            if(playerMoney < 5) {
-                window.alert("You do not have enough gold to do this");
-            }else if(upgradeOption && playerMoney >= 5){
-                window.alert("You give your weapon to the shop keeper, his hands glow blue, magic feels the air, and with a flash your sword does 5 more damage .");
-                playerMoney -= 5;
-                playerAttack += 5;
-                console.log(`You now have ${playerMoney} gold left.`);
-            }else{
-                window.alert("You chose to not upgrade.");
+            if(upgradeOption){
+                playerInfo.upgrade();
             }
             
             let reUpShop = window.confirm("Is there anything else I can do for ya?")
@@ -142,11 +110,11 @@ const shop = function(){
 }
 
 const endGame = function(){
-    if(playerHealth > 0 ){
-        window.alert(`The game is over ${playerName}. Let's see how you did!`);
-        window.alert(`Your score is ${score}`); 
+    if(playerInfo.health > 0 ){
+        window.alert(`The game is over ${playerInfo.name}. Let's see how you did!`);
+        window.alert(`Your score is ${playerInfo.score}`); 
     }else {
-        window.alert(`${playerName} has died in battle!`);
+        window.alert(`${playerInfo.name} has died in battle!`);
         window.alert("Game Over!");
     }
 
@@ -162,24 +130,73 @@ const endGame = function(){
 
 }
 
+const playerInfo = {
+    name: window.prompt("What is your robot's name?"),
+    health: 100,
+    attack: 10,
+    gold: 10,
+    score: 0,
+    fullReset: function() {
+        this.health = 100;
+        this.attack = 10;
+        this.gold = 10;
+        this.score = 0;
+    },
+    heal: function() {
+        if (this.gold >= 7) {
+            window.alert("You suddenly feel the warmth of sunlight washing over you, healing for 20 health points.");
+            this.health += 20;
+            this.gold -= 7;
+            console.log(`You now have ${this.gold} gold left.`);
+        } else {
+            window.alert("You don't have enough gold!");
+        }
+    },
+    upgrade: function() {
+        if (this.gold >= 5) {
+            window.alert("You give your weapon to the shopkeeper. His hands glow blue, magic fills the air, and with a flash, your sword does 5 more damage.");
+            this.attack += 5;
+            this.gold -= 5;
+            console.log(`You now have ${this.gold} gold left.`);
+        } else {
+            window.alert("You don't have enough gold!");
+        }
+    }
+}
+
+const enemyInfo = [
+
+    {
+        name: "Roborto",
+        attack: rng(10, 14)
+    },
+    {
+        name: "Amy Android",
+        attack: rng(10, 14)
+    },
+    {
+        name: "Robo Trumble",
+        attack: rng(10, 14)
+    }
+];
+
+
+
 
 const startGame = function(){ 
     // reset player stats
-    playerHealth = 100;
-    playerAttack = 10;
-    playerMoney = 10;
+    playerInfo.fullReset();
     gameOngoing = true;
-    for(i=0; i < enemyRobots.length && gameOngoing; i++){
-        if(playerHealth > 0){
+    for(i=0; i < enemyInfo.length && gameOngoing; i++){
+        if(playerInfo.health > 0){
             // alert players the round started
             window.alert("Welcome To Robot Gladiators");
-            window.alert(`Round ${i + 1}: ${playerName} vs ${enemyRobots[i]}`);
-            let pickedEnemyName = enemyRobots[i];      
-            console.log(pickedEnemyName);
-            enemyHealth = rng(40, 60);
-            fight(pickedEnemyName);
+            window.alert(`Round ${i + 1}: ${playerInfo.name} vs ${enemyInfo[i].name}`);
+            let pickedEnemyObj = enemyInfo[i];
+            pickedEnemyObj.health = rng(40, 60);
+            fight(pickedEnemyObj); 
 
-            if(playerHealth > 0 && i < enemyRobots.length -1){
+            if(playerInfo.health > 0 && i <  enemyInfo.length -1){
                 let shopConfirm = window.confirm("The fight is over, would you like to vist the store before the next round?");
                 
                 if(shopConfirm){
