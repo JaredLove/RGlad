@@ -16,7 +16,9 @@ const fight = function(enemyObj){
                 enemyObj.health = Math.max(0, enemyObj.health - damage);
                 if (enemyObj.health <= 0){
                     window.alert(`${playerInfo.name} has done ${damage} damage to ${enemyObj.name} resulting in their death!`);
+                    window.alert(`You earned 20 points and 10 gold pieces for defeating ${enemyObj.name}`);
                     playerInfo.score += 20;
+                    playerInfo.gold += 10;
                     break;
                 }else {
                     // log the result
@@ -55,12 +57,12 @@ const fight = function(enemyObj){
         }
 };
 
-const shop = function(){
+const tavern = function(){
     window.alert("Welcome to the tavern!");
-    let shopOptionPrompt = window.prompt("Type 1 to Heal, 2 to upgrade your attack, and 3 to leave the tavern");
+    let tavernOptionPrompt = window.prompt("Type 1 to Heal, 2 to upgrade your attack, and 3 to leave the tavern");
     console.log(`${playerInfo.name}'s gold: ${playerInfo.gold}`);
-    shopOptionPrompt = parseInt(shopOptionPrompt);
-    switch(shopOptionPrompt){
+    tavernOptionPrompt = parseInt(tavernOptionPrompt);
+    switch(tavernOptionPrompt){
         case 1:
             let healOption = window.confirm("Healing will cost you 7 gold pieces, are you sure you want to this?");
             if(healOption){
@@ -69,9 +71,9 @@ const shop = function(){
                 window.alert("You chose to not heal.");
             }
             
-            let reShop = window.confirm("Is there anything else I can do for ya?")
-            if(reShop){
-                shop();
+            let retavern = window.confirm("Is there anything else I can do for ya?")
+            if(retavern){
+                tavern();
             }else{
                 window.alert("Thank's for visiting the tavern!");
             }
@@ -83,9 +85,9 @@ const shop = function(){
                 playerInfo.upgrade();
             }
             
-            let reUpShop = window.confirm("Is there anything else I can do for ya?")
-            if(reUpShop){
-                shop();
+            let reUptavern = window.confirm("Is there anything else I can do for ya?")
+            if(reUptavern){
+                tavern();
             }else{
                 window.alert("Thank you for visiting the tavern!");
             }
@@ -96,12 +98,12 @@ const shop = function(){
             if(leaveOption){
                 window.alert("Thank you for visiting the tavern!");
             }else{
-                shop();
+                tavern();
             }
             break;
         default:
             console.log("You did not choose a valid option");
-            shop();
+            tavern();
             break;
     }
 }
@@ -109,11 +111,15 @@ const shop = function(){
 const endGame = function(){
     if(playerInfo.health > 0 ){
         window.alert(`The game is over ${playerInfo.name}. Let's see how you did!`);
-        window.alert(`Your score is ${playerInfo.score}`); 
+        window.alert(`Your score is ${playerInfo.score}`);
     }else {
         window.alert(`${playerInfo.name} has died in battle!`);
         window.alert("Game Over!");
     }
+
+    if(playerInfo.score > 0){
+        highScore();
+    } 
 
     let playagainConfirm = window.confirm("Would you like to play again?");
     
@@ -125,6 +131,19 @@ const endGame = function(){
 
     
 
+}
+
+const highScore = function(){
+    let highScore = localStorage.getItem("highscore");
+    if(highScore === null){
+        window.alert(`You earned the new highscore of ${playerInfo.score}`);
+        localStorage.setItem("highscore", `${playerInfo.name}: ${playerInfo.score}`);
+    }else if(highScore < playerInfo.score){
+        window.alert(`You earned the new highscore of ${playerInfo.score} beating the old highscore of ${highScore}`);
+        localStorage.setItem("highscore", `${playerInfo.name}: ${playerInfo.score}`);
+    }else{
+        window.alert(`You did not beat the current highscore of ${highScore}`);
+    }
 }
 
 const getPlayerName = function(){
@@ -162,7 +181,7 @@ const playerInfo = {
     },
     upgrade: function() {
         if (this.gold >= 5) {
-            window.alert("You give your weapon to the shopkeeper. His hands glow blue, magic fills the air, and with a flash, your sword does 5 more damage.");
+            window.alert("You give your weapon to the tavernkeeper. His hands glow blue, magic fills the air, and with a flash, your sword does 5 more damage.");
             this.attack += 5;
             this.gold -= 5;
             console.log(`You now have ${this.gold} gold left.`);
@@ -205,10 +224,10 @@ const startGame = function(){
             fight(pickedEnemyObj); 
 
             if(playerInfo.health > 0 && i <  enemyInfo.length -1){
-                let shopConfirm = window.confirm("The fight is over, would you like to vist the store before the next round?");
+                let tavernConfirm = window.confirm("The fight is over, would you like to vist the store before the next round?");
                 
-                if(shopConfirm){
-                  shop();  
+                if(tavernConfirm){
+                  tavern();  
                 }
             }
         }
