@@ -8,8 +8,7 @@ const rng = function(min, max){
 const fight = function(enemyObj){
         console.log(`${playerInfo.name}'s specs: Health: ${playerInfo.health} Attack Power: ${playerInfo.attack}`);
         while(playerInfo.health > 0 && enemyObj.health > 0  && gameOngoing){
-            let promptFight = window.prompt("Would you like to FIGHT, SKIP, or End this battle? Enter 'FIGHT', 'SKIP', or 'Quit' to choose");
-
+            let promptFight = window.prompt("Would you like to FIGHT, SKIP, or End this battle? Enter 'FIGHT', 'SKIP', or 'Quit' to choose").toLowerCase();
 
             if(promptFight === "FIGHT" || promptFight === "fight"){
                 let damage = rng(playerInfo.attack - 3, playerInfo.attack);
@@ -51,14 +50,14 @@ const fight = function(enemyObj){
                 gameOngoing = false;
                 return;
             }else{  
-                window.alert("Please input a valid option 'FIGHT' or 'SKIP'");
+                window.alert("Please input a valid response");
             }
         }
 };
 
 const shop = function(){
     window.alert("Welcome to the tavern!");
-    let shopOptionPrompt = window.prompt("Would you like to 'HEAL', 'UPGRADE', or 'LEAVE' the tavern?");
+    let shopOptionPrompt = window.prompt("Would you like to 'HEAL', 'UPGRADE', or 'LEAVE' the tavern?").toLowerCase();
     console.log(`${playerInfo.name}'s gold: ${playerInfo.gold}`);
     switch(shopOptionPrompt){
         case "HEAL":
