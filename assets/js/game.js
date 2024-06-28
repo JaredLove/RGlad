@@ -139,7 +139,7 @@ const highScore = function(){
         window.alert(`You earned the new highscore of ${playerInfo.score}`);
         localStorage.setItem("highscore", `${playerInfo.name}: ${playerInfo.score}`);
     }else if(highScore < playerInfo.score){
-        window.alert(`You earned the new highscore of ${playerInfo.score} beating the old highscore of ${highScore}`);
+        window.alert(`You earned the new highscore of ${playerInfo.score} beating the old highscore held by ${highScore}`);
         localStorage.setItem("highscore", `${playerInfo.name}: ${playerInfo.score}`);
     }else{
         window.alert(`You did not beat the current highscore of ${highScore}`);
