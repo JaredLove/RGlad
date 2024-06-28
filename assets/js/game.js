@@ -57,11 +57,11 @@ const fight = function(enemyObj){
 
 const shop = function(){
     window.alert("Welcome to the tavern!");
-    let shopOptionPrompt = window.prompt("Would you like to 'HEAL', 'UPGRADE', or 'LEAVE' the tavern?").toLowerCase();
+    let shopOptionPrompt = window.prompt("Type 1 to Heal, 2 to upgrade your attack, and 3 to leave the tavern");
     console.log(`${playerInfo.name}'s gold: ${playerInfo.gold}`);
+    shopOptionPrompt = parseInt(shopOptionPrompt);
     switch(shopOptionPrompt){
-        case "HEAL":
-        case "heal":
+        case 1:
             let healOption = window.confirm("Healing will cost you 7 gold pieces, are you sure you want to this?");
             if(healOption){
                 playerInfo.heal();
@@ -77,8 +77,7 @@ const shop = function(){
             }
 
             break;
-        case "UPGRADE":
-        case "upgrade":
+        case 2:
             let upgradeOption = window.confirm("Upgrading your attack by 5 will cost you 5 gold pieces, are you sure you want to this?");
             if(upgradeOption){
                 playerInfo.upgrade();
@@ -92,8 +91,7 @@ const shop = function(){
             }
 
             break;
-        case "LEAVE":
-        case "leave":
+        case 3:
             let leaveOption = window.confirm("You are exting the tavern, are you sure you want to do this?");
             if(leaveOption){
                 window.alert("Thank you for visiting the tavern!");
