@@ -73,7 +73,7 @@ const shop = function(){
             if(reShop){
                 shop();
             }else{
-                window.alert("Thank you for visiting the tavern!");
+                window.alert("Thank's for visiting the tavern!");
             }
 
             break;
